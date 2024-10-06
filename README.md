@@ -10,7 +10,7 @@
 // Khai báo mảng vị trí đám mây
 long long cloud_positions[CLOUD_COUNT][2];
 
-// Hàm vẽ mặt trời
+// HÀM VẼ MẶT TRỜI
 void sun() {
     setcolor(WHITE);
     setfillstyle(SOLID_FILL, YELLOW);
@@ -19,7 +19,34 @@ void sun() {
 }
 
 
-// Hàm vẽ đám mây
+// VẼ LÁ
+void vehoa(int x, int y) {
+	setcolor(LIGHTMAGENTA);
+    setfillstyle(SOLID_FILL, LIGHTMAGENTA);
+    fillellipse(x, y, 3, 3); 
+}
+// KHỞI TẠO GIÁ TRỊ CHO HOA
+int ax[60], ay[60], tocdo[60], tocdox[60];	
+// HIỆU ỨNG HOA RƠI
+void vela() {
+	for ( int i = 0 ; i < 60 ; i++ ) {
+		vehoa(ax[i],ay[i]);
+		ax[i] = ax[i] + tocdox[i] ; // cho hoa rơi theo phương ngang 
+		ay[i] = ay[i] + tocdo[i];	// cho hoa rơi theo phương dọc 
+		
+		// khởi tạo lại giá trị khi hoa rơi khỏi màn hình 
+		if ( ax[i] > getmaxx() || ay[i] > getmaxy() || ax[i] < 0 || tocdo[i] == 0   ) {
+			ax[i] = rand() % getmaxx() ;
+			ay[i] = 0 ;
+			tocdox[i] = rand() % 5 + (-1);
+			tocdo[i] = rand()  % 3;
+		}
+		
+	}
+}
+
+
+// HÀM VẼ ĐÁM MÂY
 void may() {
     setcolor(WHITE);
     setfillstyle(SOLID_FILL, WHITE);
@@ -31,7 +58,9 @@ void may() {
         fillellipse(cloud_positions[k][0] - 30, cloud_positions[k][1] - 20, 40, 30);
     }
 }
-// Hàm vẽ núi
+
+
+// HÀM VẼ NÚI
 void nui() {
     setcolor(GREEN);
     setfillstyle(SOLID_FILL, LIGHTGREEN);
@@ -42,7 +71,52 @@ void nui() {
     fillpoly(4, mountain2);
 }
 
-// Hàm vẽ đường
+
+// HÀM VẼ CHIM
+void drawBird(int x, int y) {
+    // Vẽ thân chim (hình elip nhỏ hơn)
+    setfillstyle(SOLID_FILL, BLACK);
+    fillellipse(x, y, 20, 10); // tâm (x, y), bán kính ngang 30, bán kính dọc 15
+
+    // Vẽ đầu chim (hình tròn nhỏ hơn)
+    setfillstyle(SOLID_FILL, BLACK);
+    fillellipse(x + 20, y, 5, 5); // đầu nằm bên phải thân chim
+
+    // Vẽ mỏ (hình tam giác nhỏ hơn)
+    setfillstyle(SOLID_FILL, BLACK);
+    line(x + 40, y, x + 50, y - 3); // phần trên của mỏ
+    line(x + 40, y, x + 50, y + 3); // phần dưới của mỏ
+    line(x + 50, y - 3, x + 50, y + 3); // nối hai điểm của mỏ
+
+    // Vẽ cánh 
+    static bool wingUp = false;
+    if (wingUp) {
+        line(x - 15, y, x - 45, y - 30); // cánh trái bay lên
+        line(x - 45, y - 30, x - 30, y); // cánh trái trở về thân
+        line(x + 15, y, x + 45, y - 30); // cánh phải bay lên
+        line(x + 45, y - 30, x + 30, y); // cánh phải trở về thân
+    } else {
+        line(x - 15, y, x - 45, y + 30); // cánh trái bay xuống
+        line(x - 45, y + 30, x - 30, y); // cánh trái trở về thân
+        line(x + 15, y, x + 45, y + 30); // cánh phải bay xuống
+        line(x + 45, y + 30, x + 30, y); // cánh phải trở về thân
+    }
+    wingUp = !wingUp; // thay đổi trạng thái cánh cho khung hình tiếp theo
+}
+void moveBird(int &x, int y) {
+    // Di chuyển chim sang phải
+    if (x < getmaxx() + 50) { // Kiểm tra xem chim có ra ngoài màn hình không
+        x += 5; // Tăng tọa độ x để chim di chuyển sang phải
+    } else {
+        x = -50; // Nếu chim ra ngoài, đặt lại vị trí x sang trái
+    }
+
+    drawBird(x, y); // Vẽ chim tại vị trí mới
+}
+
+
+
+// HÀM VẼ ĐƯỜNG
 void duong() {
     setfillstyle(1,LIGHTGREEN);
     bar(0, 450, 800, 500);
@@ -62,7 +136,8 @@ void duong() {
     }
 }
 
-// cối xay gió
+
+// CỐI XAY GIÓ
 void coixaygio ( int tamx, int tamy, int w, int h , int angle = 0 ) {
 
 double theta = ( double ) (angle%180)*3.14/180.0	;
@@ -109,6 +184,8 @@ int main() {
     initgraph(&driver, &mode, (char*)"");
     int gd = DETECT, gm;
     initgraph(&gd, &gm, "C:\\Turboc3\\BGI");
+    int X = 100;
+    int Y = 150;
     if ((maloi = graphresult()) != 0) {
         printf("Không thể khởi động đồ họa \n");
         printf("Mã lỗi : %d \n%s ", maloi, grapherrormsg(maloi));
@@ -122,6 +199,13 @@ int main() {
         cloud_positions[k][0] = 100 + rand() % 600; // Vị trí X
         cloud_positions[k][1] = 70 + rand() % 100;  // Vị trí Y
     }
+    // KHỞI TẠO GIÁ TRỊ BAN ĐÂÙ CHO HOA
+    for ( int i = 0 ; i < 60 ; i++ ) {
+		ax[i] = rand() % 600;
+		ay[i] = rand() % 600;
+		tocdo[i] = rand() % 5;
+		tocdox[i] = rand() % 3;
+	}
 
     long long i = 0, j = 0, m = 1, page = 0;
     long long max_width = getmaxx(); // Lấy giới hạn chiều rộng của màn hình
@@ -133,12 +217,13 @@ int sum =0;
         sun();
         nui();
         may();
-        duong();  
+        duong();
+        moveBird(X, Y);
 		tamgiac(250,225); 
 		coixaygio(250,225,25,75,sum);
 		coixaygio(250,225,25,75,sum+90);
-		
-		sum++; 
+		vela();
+		sum+= 2; 
 		if ( sum >= 360) sum = 0;
         
         
@@ -201,3 +286,4 @@ int sum =0;
     closegraph();
     return 0;
 }
+
