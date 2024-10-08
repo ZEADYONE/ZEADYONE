@@ -55,6 +55,19 @@ void drawBird_5(int x, int y, float a){
     setcolor(15);
 }
 
+ void vocanh(int x, int y, int &a,float scale) {
+    
+    switch(a) {
+        case 0: drawBird_1(x, y, scale); break;
+        case 1: drawBird_2(x, y, scale); break;
+        case 2: drawBird_3(x, y, scale); break;
+        case 3: drawBird_4(x, y, scale); break;
+        case 4: drawBird_5(x, y, scale); break;
+    }
+    a = (a + 1) % 5;  // Đảm bảo a luôn nằm trong khoảng từ 0 đến 4
+}
+
+
 // HÀM VẼ MẶT TRỜI
 void sun() {
     setcolor(WHITE);
@@ -71,20 +84,20 @@ void vehoa(int x, int y) {
     fillellipse(x, y, 3, 3); 
 }
 // KHỞI TẠO GIÁ TRỊ CHO HOA
-int ax[60], ay[60], tocdo[60], tocdox[60];	
+int ax[60], ay[60], tocdoy[60], tocdox[60];	
 // HIỆU ỨNG HOA RƠI
 void vela() {
 	for ( int i = 0 ; i < 60 ; i++ ) {
 		vehoa(ax[i],ay[i]);
 		ax[i] = ax[i] + tocdox[i] ; // cho hoa rơi theo phương ngang 
-		ay[i] = ay[i] + tocdo[i];	// cho hoa rơi theo phương dọc 
+		ay[i] = ay[i] + tocdoy[i];	// cho hoa rơi theo phương dọc 
 		
 		// khởi tạo lại giá trị khi hoa rơi khỏi màn hình 
-		if ( ax[i] > getmaxx() || ay[i] > getmaxy() || ax[i] < 0 || tocdo[i] == 0   ) {
+		if ( ax[i] > getmaxx() || ay[i] > getmaxy() || ax[i] < 0 || tocdoy[i] == 0   ) {
 			ax[i] = rand() % getmaxx() ;
 			ay[i] = 0 ;
-			tocdox[i] = rand() % 5 + (-1);
-			tocdo[i] = rand()  % 3;
+			tocdoy[i] = rand() % 8;
+			tocdox[i] = -7 + rand() % (5 - (-7) + 1);
 		}
 		
 	}
@@ -206,14 +219,15 @@ int main() {
     for ( int i = 0 ; i < 60 ; i++ ) {
 		ax[i] = rand() % 600;
 		ay[i] = rand() % 600;
-		tocdo[i] = rand() % 5;
-		tocdox[i] = rand() % 3;
+		tocdoy[i] = rand() % 8;
+		tocdox[i] = -7 + rand() % (5 - (-7) + 1);
 	}
 	
     long long i = 0, j = 0, m = 1, page = 0;
     long long max_width = getmaxx(); // Lấy giới hạn chiều rộng của màn hình
-	int sum =0; int a =0; float scale = 1.0;
-    while (1) { int x1 = 200  ,y1 = 200;
+	int sum =0;int a = 0;
+        int speed = 100;
+    while (1) { int x1 = 900  ,y1 = 50,x2 = 400,y2 = 100,x3 = 550,y3 = 70;
         setactivepage(page);
         cleardevice(); // Xóa trang active trước khi vẽ
         setbkcolor(LIGHTBLUE);
@@ -221,21 +235,16 @@ int main() {
         nui();
         may();
         duong();
+        vocanh(x1, y1, a,0.5);
+        vocanh(x2, y2, a,1.0);
+        vocanh(x3, y3, a,0.75);
 		tamgiac(250,225); 
 		coixaygio(250,225,25,75,sum);
 		coixaygio(250,225,25,75,sum+90);
 		vela();
 		sum+= 2; 
 		if ( sum >= 360) sum = 0;
-        if (a==0 ) {
-		drawBird_1(x1,y1,scale); delay(200) ;}
-        	else if (a==1) drawBird_2(x1,y1,scale);
-        		else if ( a==2) drawBird_3(x1,y1,scale);
-        			else if (a==3) drawBird_4(x1,y1,scale);
-        				else if ( a==4 ) {drawBird_5(x1,y1,scale);
-        					a=0;
-						}
-	a++;
+        
         // Vẽ nhân vật chạy
         setcolor(WHITE);
         circle(50 + i, 300 + j, 15);  // Đầu
@@ -288,7 +297,7 @@ int main() {
 
         page = 1 - page; // Chuyển đổi giữa 2 trang
 
-        delay(50); // Giảm độ trễ để chuyển trang mượt mà hơn
+        delay(70); // Giảm độ trễ để chuyển trang mượt mà hơn
     }
 
     closegraph();
