@@ -9,6 +9,51 @@
 
 // Khai báo mảng vị trí đám mây
 long long cloud_positions[CLOUD_COUNT][2];
+// VẼ CHIM
+void drawBird_1(int x, int y, float a){
+    setcolor(0);
+    int b1[10] = {a*(x- 20), a*(y - 15), a*x, a*(y+5), a*(x+20), a*(y - 15), a*x, a*(y - 5), a*(x - 20), a*(y-15)};
+    drawpoly(5, b1);
+    setfillstyle(1, 0);
+    floodfill(a*x, a*y, 0);
+    setcolor(15);
+}
+
+void drawBird_2(int x, int y, float a){
+    setcolor(0);
+    int b2[10] = {a*(x - 20), a*(y -10), a*x, a*(y + 3), a*(x + 20), a*(y - 10), a*(x), a*(y - 5), a*(x - 20), a*(y - 10)};
+    drawpoly(5, b2);
+    setfillstyle(1, 0);
+    floodfill(a*(x), a*(y), 0);
+    setcolor(15);
+}
+
+void drawBird_3(int x, int y, float a){
+    setcolor(0);
+    int b3[10] = {a*(x - 20), a*(y), a*x, a*(y+5), a*(x+20), a*y, a*x, a*(y - 2), a*(x - 20), a*y};
+    drawpoly(5, b3);
+    setfillstyle(1, 0);
+    floodfill(a*x, a*y, 0);
+    setcolor(15);
+}
+
+void drawBird_4(int x, int y, float a){
+    setcolor(0);
+    int b4[10] = {a*(x - 20), a*(y + 10), a*x, a*(y + 5), a*(x + 20), a*(y + 10), a*x, a*(y - 3), a*(x - 20), a*(y+10)};
+    drawpoly(5, b4);
+    setfillstyle(1, 0);
+    floodfill(a*x, a*y, 0);
+    setcolor(15);
+}
+
+void drawBird_5(int x, int y, float a){
+    setcolor(0);
+    int b5[10] = {a*(x - 20), a*(y + 15), a*x, a*(y+5), a*(x+20), a*(y+15), a*x, a*(y - 5), a*(x - 20), a*(y+15)};
+    drawpoly(5, b5);
+    setfillstyle(1, 0);
+    floodfill(a*x, a*y, 0);
+    setcolor(15);
+}
 
 // HÀM VẼ MẶT TRỜI
 void sun() {
@@ -71,48 +116,6 @@ void nui() {
     fillpoly(4, mountain2);
 }
 
-
-// HÀM VẼ CHIM
-void drawBird(int x, int y) {
-    // Vẽ thân chim (hình elip nhỏ hơn)
-    setfillstyle(SOLID_FILL, BLACK);
-    fillellipse(x, y, 20, 10); // tâm (x, y), bán kính ngang 30, bán kính dọc 15
-
-    // Vẽ đầu chim (hình tròn nhỏ hơn)
-    setfillstyle(SOLID_FILL, BLACK);
-    fillellipse(x + 20, y, 5, 5); // đầu nằm bên phải thân chim
-
-    // Vẽ mỏ (hình tam giác nhỏ hơn)
-    setfillstyle(SOLID_FILL, BLACK);
-    line(x + 40, y, x + 50, y - 3); // phần trên của mỏ
-    line(x + 40, y, x + 50, y + 3); // phần dưới của mỏ
-    line(x + 50, y - 3, x + 50, y + 3); // nối hai điểm của mỏ
-
-    // Vẽ cánh 
-    static bool wingUp = false;
-    if (wingUp) {
-        line(x - 15, y, x - 45, y - 30); // cánh trái bay lên
-        line(x - 45, y - 30, x - 30, y); // cánh trái trở về thân
-        line(x + 15, y, x + 45, y - 30); // cánh phải bay lên
-        line(x + 45, y - 30, x + 30, y); // cánh phải trở về thân
-    } else {
-        line(x - 15, y, x - 45, y + 30); // cánh trái bay xuống
-        line(x - 45, y + 30, x - 30, y); // cánh trái trở về thân
-        line(x + 15, y, x + 45, y + 30); // cánh phải bay xuống
-        line(x + 45, y + 30, x + 30, y); // cánh phải trở về thân
-    }
-    wingUp = !wingUp; // thay đổi trạng thái cánh cho khung hình tiếp theo
-}
-void moveBird(int &x, int y) {
-    // Di chuyển chim sang phải
-    if (x < getmaxx() + 50) { // Kiểm tra xem chim có ra ngoài màn hình không
-        x += 5; // Tăng tọa độ x để chim di chuyển sang phải
-    } else {
-        x = -50; // Nếu chim ra ngoài, đặt lại vị trí x sang trái
-    }
-
-    drawBird(x, y); // Vẽ chim tại vị trí mới
-}
 
 
 
@@ -206,11 +209,11 @@ int main() {
 		tocdo[i] = rand() % 5;
 		tocdox[i] = rand() % 3;
 	}
-
+	
     long long i = 0, j = 0, m = 1, page = 0;
     long long max_width = getmaxx(); // Lấy giới hạn chiều rộng của màn hình
-int sum =0; 
-    while (1) {
+	int sum =0; int a =0; float scale = 1.0;
+    while (1) { int x1 = 200  ,y1 = 200;
         setactivepage(page);
         cleardevice(); // Xóa trang active trước khi vẽ
         setbkcolor(LIGHTBLUE);
@@ -218,16 +221,21 @@ int sum =0;
         nui();
         may();
         duong();
-        moveBird(X, Y);
 		tamgiac(250,225); 
 		coixaygio(250,225,25,75,sum);
 		coixaygio(250,225,25,75,sum+90);
 		vela();
 		sum+= 2; 
 		if ( sum >= 360) sum = 0;
-        
-        
-
+        if (a==0 ) {
+		drawBird_1(x1,y1,scale); delay(200) ;}
+        	else if (a==1) drawBird_2(x1,y1,scale);
+        		else if ( a==2) drawBird_3(x1,y1,scale);
+        			else if (a==3) drawBird_4(x1,y1,scale);
+        				else if ( a==4 ) {drawBird_5(x1,y1,scale);
+        					a=0;
+						}
+	a++;
         // Vẽ nhân vật chạy
         setcolor(WHITE);
         circle(50 + i, 300 + j, 15);  // Đầu
@@ -286,4 +294,3 @@ int sum =0;
     closegraph();
     return 0;
 }
-
