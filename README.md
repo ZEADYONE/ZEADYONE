@@ -212,12 +212,12 @@ void duong() {
 	int sandColor = RGB(194, 178, 128);
     setfillstyle(1,sandColor);
     bar(0, 400, 800, 500);
-    bar(0,300,800,310);
+   
     
     
     int riverColor = RGB(0, 51, 102);
     setfillstyle(1, riverColor);
-    bar(0,310,800,360);
+    bar(0,300,800,360);
     
     
     
