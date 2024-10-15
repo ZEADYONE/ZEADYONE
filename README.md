@@ -9,80 +9,80 @@
 #define PI 3.14159265
 // Khai báo mảng vị trí đám mây
 long long cloud_positions[CLOUD_COUNT][2];
+
 // VẼ CHIM
-void chim1(int x, int y, float a){
+void chim1(int x, int y, float size){
     setcolor(0);
-    int b1[10] = {a*(x- 20), a*(y - 15), a*x, a*(y+5), a*(x+20), a*(y - 15), a*x, a*(y - 5), a*(x - 20), a*(y-15)};
+    int b1[10] = {size*(x- 20), size*(y - 15), size*x, size*(y+5), size*(x+20), size*(y - 15), size*x, size*(y - 5), size*(x - 20), size*(y-15)};
     drawpoly(5, b1);
     setfillstyle(1, 0);
-    floodfill(a*x, a*y, 0);
+    floodfill(size*x, size*y, 0);
     setcolor(15);
 }
 
-void chim2(int x, int y, float a){
+void chim2(int x, int y, float size){
     setcolor(0);
-    int b2[10] = {a*(x - 20), a*(y -10), a*x, a*(y + 3), a*(x + 20), a*(y - 10), a*(x), a*(y - 5), a*(x - 20), a*(y - 10)};
+    int b2[10] = {size*(x - 20), size*(y -10), size*x, size*(y + 3), size*(x + 20), size*(y - 10), size*(x), size*(y - 5), size*(x - 20), size*(y - 10)};
     drawpoly(5, b2);
     setfillstyle(1, 0);
-    floodfill(a*(x), a*(y), 0);
+    floodfill(size*(x), size*(y), 0);
     setcolor(15);
 }
 
-void chim3(int x, int y, float a){
+void chim3(int x, int y, float size){
     setcolor(0);
-    int b3[10] = {a*(x - 20), a*(y), a*x, a*(y+5), a*(x+20), a*y, a*x, a*(y - 2), a*(x - 20), a*y};
+    int b3[10] = {size*(x - 20), size*(y), size*x, size*(y+5), size*(x+20), size*y, size*x, size*(y - 2), size*(x - 20), size*y};
     drawpoly(5, b3);
     setfillstyle(1, 0);
-    floodfill(a*x, a*y, 0);
+    floodfill(size*x, size*y, 0);
     setcolor(15);
 }
 
-void chim4(int x, int y, float a){
+void chim4(int x, int y, float size){
     setcolor(0);
-    int b4[10] = {a*(x - 20), a*(y + 10), a*x, a*(y + 5), a*(x + 20), a*(y + 10), a*x, a*(y - 3), a*(x - 20), a*(y+10)};
+    int b4[10] = {size*(x - 20), size*(y + 10), size*x, size*(y + 5), size*(x + 20), size*(y + 10), size*x, size*(y - 3), size*(x - 20), size*(y+10)};
     drawpoly(5, b4);
     setfillstyle(1, 0);
-    floodfill(a*x, a*y, 0);
+    floodfill(size*x, size*y, 0);
     setcolor(15);
 }
 
-void chim5(int x, int y, float a){
+void chim5(int x, int y, float size){
     setcolor(0);
-    int b5[10] = {a*(x - 20), a*(y + 15), a*x, a*(y+5), a*(x+20), a*(y+15), a*x, a*(y - 5), a*(x - 20), a*(y+15)};
+    int b5[10] = {size*(x - 20), size*(y + 15), size*x, size*(y+5), size*(x+20), size*(y+15), size*x, size*(y - 5), size*(x - 20), size*(y+15)};
     drawpoly(5, b5);
     setfillstyle(1, 0);
-    floodfill(a*x, a*y, 0);
+    floodfill(size*x, size*y, 0);
     setcolor(15);
 }
-
- void vocanh(int x, int y, int &a,float scale) {
+void vocanh(int x, int y, int &a,float size) {
     
     switch(a) {
-        case 0: chim1(x, y, scale); break;
-        case 1: chim2(x, y, scale); break;
-        case 2: chim3(x, y, scale); break;
-        case 3: chim4(x, y, scale); break;
-        case 4: chim5(x, y, scale); break;
+        case 0: chim1(x, y, size); break;
+        case 1: chim2(x, y, size); break;
+        case 2: chim3(x, y, size); break;
+        case 3: chim4(x, y, size); break;
+        case 4: chim5(x, y, size); break;
     }
     a = (a + 1) % 5;  // Đảm bảo a luôn nằm trong khoảng từ 0 đến 4
-}
+}           
 
 
 // HÀM VẼ MẶT TRỜI
 void sun() {
     setcolor(WHITE);
     int suncolor = RGB (255, 215, 0);
-    setfillstyle(SOLID_FILL, suncolor);
+    setfillstyle(1, suncolor);
     circle(550, 60 , 50);
     floodfill(550, 60, WHITE);
 }
 
 
 
-// VẼ LÁ
+// VẼ HOA
 void vehoa(int x, int y) {
 	setcolor(LIGHTMAGENTA);
-    setfillstyle(SOLID_FILL, WHITE);
+    setfillstyle(1, WHITE);
     fillellipse(x, y, 3, 3); 
 }
 // KHỞI TẠO GIÁ TRỊ CHO HOA
@@ -105,12 +105,63 @@ void vela() {
 	}
 }
 
+// SÂU
+int check1 = 1;
+void sau1(int *x, int *y, int nhap) {
+    int direc = (check1 == 1) ? 5 : -5;  // Hướng di chuyển
+    int x1 = *x + ((check1 == 1) ? 8 : -8);
+    int y1 = *y - 5;
+
+    setfillstyle(1, GREEN);
+
+    // Đổi hướng dựa trên giới hạn của x
+    if (*x == 400) check1 = 0;
+    else if (*x == 150) check1 = 1;
+
+    // Vẽ sector và circle dựa trên giá trị 'nhap'
+    int radiusX = (nhap == 1) ? 15 : 20;
+    int radiusY = (nhap == 1) ? 15 : 10;
+
+    sector(*x, *y, 0, 180, radiusX, radiusY);
+    circle(x1, y1, 3);
+    setcolor(WHITE);
+    circle(x1, y1, 2);
+
+    // Cập nhật tọa độ x
+    *x += direc;
+}
+int check2 = 1;
+void sau2(int *x, int *y, int nhap) { 
+	setcolor(BLACK);
+    int direc = (check2 == 1) ? 5 : -5;  // Hướng di chuyển
+    int x1 = *x + ((check2 == 1) ? 8 : -8);
+    int y1 = *y - 5;
+
+    setfillstyle(1,LIGHTMAGENTA);
+
+    // Đổi hướng dựa trên giới hạn của x
+    if (*x == 400) check2 = 0;
+    else if (*x == 150) check2 = 1;
+
+    // Vẽ sector và circle dựa trên giá trị 'nhap'
+    int radiusX = (nhap == 1) ? 15 : 20;
+    int radiusY = (nhap == 1) ? 15 : 10;
+
+    sector(*x, *y, 0, 180, radiusX, radiusY);
+    circle(x1, y1, 3);
+    setcolor(WHITE);
+    circle(x1, y1, 2);
+
+    // Cập nhật tọa độ x
+    *x += direc;
+}
+
 
 // BỤI CÂY
 void buicay(int x, int y) {
 	int LIGHTGRAY =RGB(105, 105, 105);
     setcolor(LIGHTGRAY);
-    setfillstyle(SOLID_FILL, LIGHTGRAY);
+    setfillstyle(1, LIGHTGRAY);
 
     // Vẽ các hình tròn nhỏ để tạo bụi cây
     circle(x, y, 30);
@@ -133,7 +184,7 @@ void buicay(int x, int y) {
 // HÀM VẼ ĐÁM MÂY
 void may() {
     setcolor(WHITE);
-    setfillstyle(SOLID_FILL, WHITE);
+    setfillstyle(1, WHITE);
     for (int k = 0; k < CLOUD_COUNT; k++) {
         fillellipse(cloud_positions[k][0], cloud_positions[k][1], 50, 40);
         fillellipse(cloud_positions[k][0] + 50, cloud_positions[k][1], 40, 30);
@@ -165,16 +216,26 @@ void nui() {
     
 }
 
-// VẼ CÂY 
+// VẼ THÂN DỪA
 void cay(int x, int y) {
 	int BROWN = RGB(139, 69, 19);
 	setcolor(BROWN);
 	setfillstyle(1,BROWN);
 	ellipse(x,y,0,360,10,80);
-	floodfill(x,y,BROWN);
-		
+	floodfill(x,y,BROWN);		
 }
-// VẼ LÁ CHO CÂY
+// VẼ QUẢ (x, y) và bán kính r
+void veQuaDua(int x, int y, int r) {
+    setfillstyle(1, BROWN);  // Màu nâu cho vỏ dừa
+    setcolor(BLACK);
+    fillellipse(x, y, r, r);  // Vẽ quả dừa dạng hình tròn
+
+    // Vẽ điểm sáng để tạo hiệu ứng phản chiếu
+    setfillstyle(1, WHITE);
+    fillellipse(x - r / 3, y - r / 3, r / 4, r / 4);
+}
+
+// VẼ LÁ DỪA
 void la(int x, int y ,	int angle = 0) {
 	for ( int i = 0; i < 7; i++) {
 
@@ -203,23 +264,27 @@ void la(int x, int y ,	int angle = 0) {
 		
 		angle += 50;
 	}
+	
+	veQuaDua(90, 380, 12);
+    veQuaDua(110, 380, 12);
+    veQuaDua(100, 390, 12);
 }
 
 
 
 // HÀM VẼ ĐƯỜNG
+// KHỞI TẠO VỊ TRÍ BÈO
+int beos[3][2] = {{325, 325}, {150, 335}, {500, 335}};
 void duong() {
+	// MẶT CÁT
 	int sandColor = RGB(194, 178, 128);
     setfillstyle(1,sandColor);
     bar(0, 400, 800, 500);
    
-    
-    
+    //MẶT BIỂN
     int riverColor = RGB(0, 51, 102);
     setfillstyle(1, riverColor);
     bar(0,300,800,360);
-    
-    
     
     int  PaleGreen = RGB(175, 238, 238);
     setfillstyle(1,  PaleGreen);
@@ -233,10 +298,10 @@ void duong() {
 
     
     setcolor(GREEN);
-   	setfillstyle(1, LIGHTGREEN);
-   	pieslice(325,325,30,330,10);
-	pieslice(150,335,30,330,10);// VẼ BÈO
-	pieslice(500,335,30,330,10);
+    setfillstyle(1, LIGHTGREEN);
+    for (int i = 0; i < 3; i++) {
+        pieslice(beos[i][0], beos[i][1], 30, 330, 10);
+    }
    	  	
     
     buicay(20,getmaxy()-10);
@@ -245,13 +310,26 @@ void duong() {
 }
 
 
-// CỐI XAY GIÓ
-void coixaygio ( int tamx, int tamy, int w, int h , int angle = 0 ) {
+// HÀM CẬP NHẬT VỊ TRÍ BÈO
+void capNhatBeo(int max_width) {
+    for (int i = 0; i < 3; i++) {
+        beos[i][0] += 2; // Tốc độ di chuyển ngang của bèo
+        if (beos[i][0] > max_width) {
+            beos[i][0] = -50; // Khi bèo ra khỏi màn hình, đưa nó về bên trái
+        }
+    }
+}
 
-double theta = ( double ) (angle%180)*3.14/180.0	;
-	int dx = w/2;
-	int dy = h/2;
-// tọa độ của 4 điểm trong hcn
+
+// CỐI XAY GIÓ TỪ HCN VỚI RỘNG DÀI (w,h) 
+void coixaygio ( int tamx, int tamy, int w, int h , int angle = 0 ) {
+// ANGLE LÀ GÓC QUAY 
+
+double theta = ( double ) (angle%180)*3.14/180.0	;// ĐỔI SANG ĐƠN VỊ RADIAN
+	int dx = w/2;	// TÂM X CỦA HCN
+	int dy = h/2;	// TÂM Y CỦA HCN
+	
+// TỌA ĐỘ 4 ĐIỂM TRONG HÌNH CHỦ NHẬT
 	int point[8] = {
 (int) (-dx*cos(theta) - dy*sin(theta) + tamx),
 (int) (-dx*sin(theta) + dy*cos(theta) + tamy),
@@ -262,13 +340,14 @@ double theta = ( double ) (angle%180)*3.14/180.0	;
 (int) (-dx*cos(theta) + dy*sin(theta) + tamx),
 (int) (-dx*sin(theta) -dy*cos(theta) + tamy)
 };
-// vẽ hình chữ nhật;
+
+// VẼ HCN
 for(int i=0; i<8; i+=2)
 line(point[i], point[i+1], point[(i+2)%8], point[(i+3)%8]);
 circle(tamx,tamy,10);
 }
 
-// thân cối xay gió 
+// THÂN CỐI XAY GIÓ
 void tamgiac( int tamx, int tamy ) {
 	int tamgiac[16] = {
 		tamx,tamy,
@@ -302,11 +381,16 @@ int main() {
     }
 
     srand(time(NULL)); // Khởi tạo seed cho random
-    // Khởi tạo vị trí đám mây ngẫu nhiên
+    
+    // KHỞI TẠO VỊ TRÍ ĐÁM MÂY 
     for (int k = 0; k < CLOUD_COUNT; k++) {
         cloud_positions[k][0] = 100 + rand() % 600; // Vị trí X
         cloud_positions[k][1] = 70 + rand() % 100;  // Vị trí Y
     }
+    
+    // KHỞI TẠO VỊ TRÍ CHO SÂU
+    int sau1x = 150; int sau1y = 460;
+    int sau2x = 400; int sau2y = 430;
     
     
     // KHỞI TẠO GIÁ TRỊ BAN ĐÂÙ CHO HOA
@@ -316,19 +400,39 @@ int main() {
 		tocdoy[i] = rand() % 8;
 		tocdox[i] = -7 + rand() % (5 - (-7) + 1);
 	}
+	
+	// LẤY MÀU NỀN
 	int skyColor = RGB(135, 206, 235);
+	
+	// CÁC GIÁ TRỊ ĐỂ KIỂM SOÁT VIỆC NHẢY CỦA BÓNG
 	int pos= 0 ,value;	
+	
+	// CÁC BIẾN DI CHUYỂN CỦA BÓNG
     long long i = 0, j = 0, m = 1, page = 0;
+    
     long long max_width = getmaxx(); // Lấy giới hạn chiều rộng của màn hình
-	int sum =0;int a = 0;
-        int speed = 100;
-    while (1) { int x1 = 900  ,y1 = 50,x2 = 400,y2 = 100,x3 = 550,y3 = 70;
+    
+    // KHỞI TẠO GÓC QUAY CHO CỐI XAY GIÓ
+		int sum =0;
+		
+	// BIẾN DÙNG ĐỂ CHUYỂN TIẾP CÁC HOẠT ẢNH CỦA CHIM
+		int a = 0;
+        
+    while (1) { 
         setactivepage(page);
         cleardevice(); // Xóa trang active trước khi vẽ
         setbkcolor(skyColor);
+        
+        int 	x1 = 900  ,y1 = 50, 	// VỊ TRÍ CHIM 1 
+		x2 = 400,y2 = 100,	// VỊ TRÍ CHIM 3 
+		x3 = 550,y3 = 70;	// VỊ TRÍ CHIM 3
+        
         //BACKGROUND
         sun();    nui();    may();    duong(); 
         cay(100,450);    la(100,370,90);	vela();
+        
+        // CẬP NHẬT VỊ TRÍ BÈO	
+        capNhatBeo(max_width);
         
         // CHIM
         vocanh(x1, y1, a,0.5);
@@ -340,17 +444,19 @@ int main() {
 		coixaygio(500,380,25,75,sum);
 		coixaygio(500,380,25,75,sum+90);
 		
-		
+		// TĂNG GÓC QUAY CHO CỐI XAY GIÓ
 		sum+= 2; 
 		if ( sum >= 360) sum = 0;
 		
+		// SÂU
+    	sau1(&sau1x,&sau1y,page);
+    	sau2(&sau2x,&sau2y,page);
     	
         
-        
-        // Vẽ nhân vật chạy
+        // VẼ BÓNG
         setcolor(BLACK);
         setfillstyle(1,RED);
-        circle(50 + i, 300 + j, 15);  // Đầu
+        circle(50 + i, 300 + j, 15);  // BÓNG
         floodfill(50+i,300+j,BLACK);
 
         
@@ -390,7 +496,6 @@ int main() {
 					pos =0;
 				} 
 		}
-        	
         
 
         // Cập nhật vị trí đám mây để tạo hiệu ứng động
