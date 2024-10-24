@@ -1,9 +1,6 @@
 #include <bits/stdc++.h>
-#include <conio.h>
 #include <graphics.h>
-#include <stdlib.h>
 #include <windows.h>
-#include <time.h>
 #include<math.h>
 #define CLOUD_COUNT 5
 #define PI 3.14159265
@@ -217,11 +214,11 @@ void nui() {
 }
 
 // VẼ THÂN DỪA
-void cay(int x, int y) {
+void cay(int x, int y,float size) {
 	int BROWN = RGB(139, 69, 19);
 	setcolor(BROWN);
 	setfillstyle(1,BROWN);
-	ellipse(x,y,0,360,10,80);
+	ellipse(x,y,0,360,size*10,size*80);
 	floodfill(x,y,BROWN);		
 }
 // VẼ QUẢ (x, y) và bán kính r
@@ -236,7 +233,7 @@ void veQuaDua(int x, int y, int r) {
 }
 
 // VẼ LÁ DỪA
-void la(int x, int y ,	int angle = 0) {
+void ladua1(int x, int y ,	int angle , float size) {	
 	for ( int i = 0; i < 7; i++) {
 
 	int  x1 = x-70 , tempt1 = x1,
@@ -255,7 +252,7 @@ void la(int x, int y ,	int angle = 0) {
 		tempt4 = y+ (x2 - x) *sin(theta) - (y2-y )*cos(theta);
 		tempt5 = x+ (x3 - x)*cos(theta) - (y3 - y)*sin(theta);
 		tempt6 = y+ (x3 - x) *sin(theta) - (y3-y )*cos(theta);
-	int a[10] = { x,y ,tempt1,tempt2 ,tempt5,tempt6,tempt3,tempt4,x,y};
+	int a[10] = { size*x,size*y ,size*tempt1,size*tempt2 ,size*tempt5,size*tempt6,size*tempt3,size*tempt4,size*x,size*y};
 
 		int green = RGB(46, 139, 87);
 		setcolor(GREEN);
@@ -265,19 +262,21 @@ void la(int x, int y ,	int angle = 0) {
 		angle += 50;
 	}
 	
-	veQuaDua(90, 380, 12);
-    veQuaDua(110, 380, 12);
-    veQuaDua(100, 390, 12);
+	veQuaDua(size*(x-10), size*(y+10), size*12);
+    veQuaDua(size*(x+10), size*(y+10), size*12);
+    veQuaDua(size*x, size*(y+20), size*12);
 }
+
 
 
 
 // HÀM VẼ ĐƯỜNG
 // KHỞI TẠO VỊ TRÍ BÈO
+int sandColor = RGB(194, 178, 128);
 int beos[3][2] = {{325, 325}, {150, 335}, {500, 335}};
 void duong() {
 	// MẶT CÁT
-	int sandColor = RGB(194, 178, 128);
+	
     setfillstyle(1,sandColor);
     bar(0, 400, 800, 500);
    
@@ -345,6 +344,7 @@ double theta = ( double ) (angle%180)*3.14/180.0	;// ĐỔI SANG ĐƠN VỊ RADI
 for(int i=0; i<8; i+=2)
 line(point[i], point[i+1], point[(i+2)%8], point[(i+3)%8]);
 circle(tamx,tamy,10);
+
 }
 
 // THÂN CỐI XAY GIÓ
@@ -403,6 +403,7 @@ int main() {
 	
 	// LẤY MÀU NỀN
 	int skyColor = RGB(135, 206, 235);
+
 	
 	// CÁC GIÁ TRỊ ĐỂ KIỂM SOÁT VIỆC NHẢY CỦA BÓNG
 	int pos= 0 ,value;	
@@ -423,13 +424,16 @@ int main() {
         cleardevice(); // Xóa trang active trước khi vẽ
         setbkcolor(skyColor);
         
-        int 	x1 = 900  ,y1 = 50, 	// VỊ TRÍ CHIM 1 
-		x2 = 400,y2 = 100,	// VỊ TRÍ CHIM 3 
-		x3 = 550,y3 = 70;	// VỊ TRÍ CHIM 3
+    
+        int x1 = 900  ,y1 = 50, // VỊ TRÍ CHIM 1 
+			x2 = 400,y2 = 100,	// VỊ TRÍ CHIM 3 
+			x3 = 550,y3 = 70;	// VỊ TRÍ CHIM 3
         
         //BACKGROUND
-        sun();    nui();    may();    duong(); 
-        cay(100,450);    la(100,370,90);	vela();
+        sun();    nui();    may();    duong();  vela();
+        cay(100,450,1);   ladua1(100,370,90,1.0);	
+		cay(440,390,0.5); ladua1((440/0.6),(350/0.6),90,0.6); 
+		setfillstyle(1,sandColor); bar(430,410,450,430);
         
         // CẬP NHẬT VỊ TRÍ BÈO	
         capNhatBeo(max_width);
@@ -440,10 +444,10 @@ int main() {
         vocanh(x3, y3, a,0.75);
         
         // CỐI XAY GIÓ
-		tamgiac(500,380); 
-		coixaygio(500,380,25,75,sum);
-		coixaygio(500,380,25,75,sum+90);
-		
+		tamgiac(515,380); 
+		coixaygio(515,380,25,75,sum);
+		coixaygio(515,380,25,75,sum+90);
+	
 		// TĂNG GÓC QUAY CHO CỐI XAY GIÓ
 		sum+= 2; 
 		if ( sum >= 360) sum = 0;
