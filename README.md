@@ -2,6 +2,7 @@
 #include <graphics.h>
 #include <windows.h>
 #include<math.h>
+#include <conio.h> 
 #define CLOUD_COUNT 5
 #define PI 3.14159265
 // Khai báo mảng vị trí đám mây
@@ -177,6 +178,33 @@ void buicay(int x, int y) {
     floodfill(x + 20, y - 30, LIGHTGRAY);
 }
 
+void drawUFO(int x, int y, bool glow) {
+    // Nếu 'glow' = true thì UFO phát sáng
+    if (glow) {
+        // Vẽ ánh sáng xung quanh UFO
+        setcolor(YELLOW);
+        setfillstyle(SOLID_FILL, YELLOW);
+        // Tạo vòng sáng bên ngoài UFO
+        fillellipse(x, y + 15, 60, 30);
+    }
+
+    // Vẽ đỉnh UFO (mái vòm)
+    setcolor(LIGHTCYAN);
+    setfillstyle(SOLID_FILL, LIGHTCYAN);
+    fillellipse(x, y, 30, 15);  // Đỉnh UFO
+
+    // Vẽ thân UFO
+    setcolor(LIGHTGRAY);
+    setfillstyle(SOLID_FILL, LIGHTGRAY);
+    fillellipse(x, y + 15, 50, 20);  // Thân UFO
+
+    // Vẽ đèn trên thân UFO
+    setcolor(LIGHTBLUE);
+    for (int i = -30; i <= 30; i += 15) {
+        circle(x + i, y + 15, 5);  // Đèn nhỏ
+        floodfill(x + i, y + 15, LIGHTBLUE);
+    }
+}
 
 // HÀM VẼ ĐÁM MÂY
 void may() {
@@ -379,8 +407,8 @@ int main() {
         getch();
         exit(1);
     }
-
-    srand(time(NULL)); // Khởi tạo seed cho random
+    int page = 0;
+    
     
     // KHỞI TẠO VỊ TRÍ ĐÁM MÂY 
     for (int k = 0; k < CLOUD_COUNT; k++) {
@@ -403,14 +431,11 @@ int main() {
 	
 	// LẤY MÀU NỀN
 	int skyColor = RGB(135, 206, 235);
+        // Tọa độ ban đầu của UFO
+	int x = 200, y = 200;  
+        char ch;
+        bool glow = false;  // Biến theo dõi trạng thái phát sáng
 
-	
-	// CÁC GIÁ TRỊ ĐỂ KIỂM SOÁT VIỆC NHẢY CỦA BÓNG
-	int pos= 0 ,value;	
-	
-	// CÁC BIẾN DI CHUYỂN CỦA BÓNG
-    long long i = 0, j = 0, m = 1, page = 0;
-    
     long long max_width = getmaxx(); // Lấy giới hạn chiều rộng của màn hình
     
     // KHỞI TẠO GÓC QUAY CHO CỐI XAY GIÓ
@@ -426,8 +451,8 @@ int main() {
         
     
         int x1 = 900  ,y1 = 50, // VỊ TRÍ CHIM 1 
-			x2 = 400,y2 = 100,	// VỊ TRÍ CHIM 3 
-			x3 = 550,y3 = 70;	// VỊ TRÍ CHIM 3
+	    x2 = 400,y2 = 100,	// VỊ TRÍ CHIM 3 
+	    x3 = 550,y3 = 70;	// VỊ TRÍ CHIM 3
         
         //BACKGROUND
         sun();    nui();    may();    duong();  vela();
@@ -456,51 +481,35 @@ int main() {
     	sau1(&sau1x,&sau1y,page);
     	sau2(&sau2x,&sau2y,page);
     	
-        
-        // VẼ BÓNG
-        setcolor(BLACK);
-        setfillstyle(1,RED);
-        circle(50 + i, 300 + j, 15);  // BÓNG
-        floodfill(50+i,300+j,BLACK);
+        // Vẽ UFO tại tọa độ (x, y) với trạng thái phát sáng
+        drawUFO(x, y, glow);
 
+       
         
-
         // Di chuyển theo phím
         if (GetAsyncKeyState(VK_LEFT)) {
-            if (i > -40) { // Giới hạn bên trái
-               i -= 5;
-                m++;
+            if (x > -40) { // Giới hạn bên trái
+               x -= 5;
+               
             }
         }
         if (GetAsyncKeyState(VK_RIGHT)) {
-            if (i < max_width - 50) { // Giới hạn bên phải
-                i += 5;
-                m++;
+            if (x < max_width - 50) { // Giới hạn bên phải
+                x += 5;
+               
             }
         }
         if (GetAsyncKeyState(VK_ESCAPE)) { // Thoát bằng phím ESC
             break;
         }
         if (GetAsyncKeyState(VK_UP)) { // Di chuyển lên
-            j -= 5;
+            y -= 5;
         }
         if (GetAsyncKeyState(VK_DOWN)) { // Di chuyển xuống
-            j += 5;
+            y += 5;
         } 
         	
-        if (GetAsyncKeyState(VK_SPACE) && (pos == 0) ) { // Nhảy
-        	pos = 1;
-        	value = j;
-            j -= 50; 
-        }
-        if (pos) {
-        	if ( j < value ) j+= 7;
-			if ( j >= value ) {
-					j= value;
-					pos =0;
-				} 
-		}
-        
+       
 
         // Cập nhật vị trí đám mây để tạo hiệu ứng động
         for (int k = 0; k < CLOUD_COUNT; k++) {
