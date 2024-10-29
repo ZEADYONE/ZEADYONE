@@ -191,12 +191,7 @@ void drawUFO(int x, int y, bool glow) {
         setcolor(a[j/3]);
         setfillstyle(SOLID_FILL, a[j/3]);
         fillellipse(fireX, fireY, fireWidth-j, fireHeight-j);  // Vẽ hình elip dọc làm lửa
-    }
-        
-       
-        
-        
-        
+    	}   
     }
     }
 
