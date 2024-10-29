@@ -179,31 +179,50 @@ void buicay(int x, int y) {
 }
 
 void drawUFO(int x, int y, bool glow) {
-    // Nếu 'glow' = true thì UFO phát sáng
+	int a[4] = {RGB(255, 0, 0), RGB (255, 204, 0), RGB (255, 102, 0), RGB(255, 255, 255)}; // Mảng màu
     if (glow) {
-        // Vẽ ánh sáng xung quanh UFO
-        setcolor(YELLOW);
-        setfillstyle(SOLID_FILL, YELLOW);
-        // Tạo vòng sáng bên ngoài UFO
-        fillellipse(x, y + 15, 60, 30);
+        // Vẽ hiệu ứng phóng lửa hình elip bên dưới UFO
+    int fireHeight = 20; // Chiều cao của hiệu ứng lửa
+    int fireWidth = 10;  // Độ rộng của mỗi ngọn lửa
+    for (int i = -2; i <=2; i+=2) { 
+        int fireX = x + i * 10;   // Tọa độ x của ngọn lửa
+        int fireY = y + 25;       // Tọa độ y của ngọn lửa
+		for ( int j = 0 ; j <=9 ; j += 3  ) {
+        setcolor(a[j/3]);
+        setfillstyle(SOLID_FILL, a[j/3]);
+        fillellipse(fireX, fireY, fireWidth-j, fireHeight-j);  // Vẽ hình elip dọc làm lửa
+    }
+        
+       
+        
+        
+        
+    }
     }
 
-    // Vẽ đỉnh UFO (mái vòm)
-    setcolor(LIGHTCYAN);
-    setfillstyle(SOLID_FILL, LIGHTCYAN);
-    fillellipse(x, y, 30, 15);  // Đỉnh UFO
-
-    // Vẽ thân UFO
     setcolor(LIGHTGRAY);
     setfillstyle(SOLID_FILL, LIGHTGRAY);
-    fillellipse(x, y + 15, 50, 20);  // Thân UFO
+    ellipse(x, y, 0, 360, 60, 20); // Thân chính của UFO
+    floodfill(x, y, LIGHTGRAY);
 
-    // Vẽ đèn trên thân UFO
-    setcolor(LIGHTBLUE);
-    for (int i = -30; i <= 30; i += 15) {
-        circle(x + i, y + 15, 5);  // Đèn nhỏ
-        floodfill(x + i, y + 15, LIGHTBLUE);
+    // Vẽ mái vòm trên của UFO
+    setcolor(WHITE);
+    setfillstyle(SOLID_FILL, WHITE);
+    ellipse(x, y - 20, 0, 360, 30, 15); // Mái vòm của UFO
+    floodfill(x, y - 20, WHITE);
+
+     int numLights = 5;  // Số lượng đèn tròn
+    for (int i = 0; i < numLights; i++) {
+        float angle = (i - (numLights - 1) / 2.0) * (M_PI / (numLights + 1)) + M_PI / 2; 
+        int lightX = x + cos(angle) * 45;  // Tọa độ x của đèn theo đường cong
+        int lightY = y + sin(angle) * 10;  // Tọa độ y của đèn theo đường cong
+
+        setcolor(YELLOW);
+        setfillstyle(SOLID_FILL, YELLOW);
+        circle(lightX, lightY, 5); // Vẽ đèn tròn
+        floodfill(lightX, lightY, YELLOW);
     }
+
 }
 
 // HÀM VẼ ĐÁM MÂY
@@ -483,6 +502,7 @@ int main() {
     	
         // Vẽ UFO tại tọa độ (x, y) với trạng thái phát sáng
         drawUFO(x, y, glow);
+        glow = false;
 
        
         
@@ -504,6 +524,7 @@ int main() {
         }
         if (GetAsyncKeyState(VK_UP)) { // Di chuyển lên
             y -= 5;
+            glow = !glow;
         }
         if (GetAsyncKeyState(VK_DOWN)) { // Di chuyển xuống
             y += 5;
